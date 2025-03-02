@@ -1,16 +1,47 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ScrollReveal from 'scrollreveal'; // Import ScrollReveal
 import mockup from '../assets/images/mockup.png'
 import apple from '../assets/images/apple.png'
 import playstore from '../assets/images/playstore.png'
 
 const AppDownload = () => {
+
+  useEffect(() => {
+    // ScrollReveal setup
+    ScrollReveal().reveal('.reveal', {
+        distance: '250px',
+        duration: 1000,
+        delay: 200,
+        easing: 'ease-in-out',
+        opacity: 0,
+        origin: 'left',
+        reset: true, // Optional: Reset animation on scroll back
+        // scale: 0.8,
+    });
+
+    ScrollReveal().reveal('.phone', {
+      distance: '250px',
+      duration: 1000,
+      delay: 200,
+      easing: 'ease-in-out',
+      opacity: 0,
+      origin: 'right',
+      reset: true, // Optional: Reset animation on scroll back
+      // scale: 0.8,
+  });
+
+
+}, []);
   return (
+
+
+
     <div className="w-full bg-red-600" style={{backgroundColor: '#cf0001'}}>
       <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
         <div className="flex flex-col md:flex-row items-center justify-between">
           {/* Text Content */}
-          <div className="w-full md:w-1/2 md:text-left text-center text-white mb-8 md:mb-0">
+          <div className="w-full md:w-1/2 md:text-left text-center text-white mb-8 md:mb-0 reveal">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6">
               Download
              App
@@ -25,7 +56,7 @@ const AppDownload = () => {
             </p>
             
             {/* App Store Buttons */}
-            <div className='download-options flex gap-4 md:mt-10'>
+            <div className='download-options justify-center md:justify-start flex gap-4 md:mt-10'>
                             <a href='/'>
                     <div style={{ paddingTop: '4px', paddingBottom: '8px', backgroundColor: 'white', color: 'black',}} className='app-store px-4 md:px-8 flex justify-between items-center gap-2 border-2 rounded-lg'>
                                 <div className='flex justify-center items-center'>
@@ -53,7 +84,7 @@ const AppDownload = () => {
           </div>
 
           {/* Phone Mockup */}
-          <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+          <div className="w-full md:w-1/2 flex justify-center md:justify-end phone">
             <div className="relative w-64 md:w-80">
               {/* iPhone Frame */}
               <div className="relative rounded-[3rem] overflow-hidden shadow-2xl">

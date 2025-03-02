@@ -1,32 +1,24 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-// import r11 from '../assets/images/r11.png';
-// import r12 from '../assets/images/r11.png';
-// import r13 from '../assets/images/r11.png';
-// import r14 from '../assets/images/r11.png';
-// import r15 from '../assets/images/r11.png';
+import r11 from '../assets/images/r11.png';
+import r12 from '../assets/images/r12.png';
+import r13 from '../assets/images/r13.png';
+import r14 from '../assets/images/r14.png';
+import r15 from '../assets/images/r15.png';
 
-// import r22 from '../assets/images/r22.png';
-// import r23 from '../assets/images/r23.png';
-// import r24 from '../assets/images/r24.png';
-// import r25 from '../assets/images/r25.png';
+import r22 from '../assets/images/r22.png';
+import r23 from '../assets/images/r23.png';
+import r24 from '../assets/images/r24.png';
+import r25 from '../assets/images/r25.png';
 
 
 const PhotoSlides = () => {
   const topRowImages = [
-    './src/assets/images/r11.png',
-    './src/assets/images/r12.png',
-    './src/assets/images/r13.png',
-    './src/assets/images/r14.png',
-    './src/assets/images/r15.png',
+    r11, r12, r13, r14, r15
   ];
 
   const bottomRowImages = [
-    './src/assets/images/r23.png',
-    './src/assets/images/r22.png',
-    './src/assets/images/r11.png',
-    './src/assets/images/r24.png',
-    './src/assets/images/r25.png',
+    r11, r22, r23, r24, r25
   ];
 
   // Create duplicates for smooth scrolling
@@ -73,7 +65,7 @@ const PhotoSlides = () => {
             {/* Scrolling content */}
             <div className="flex animate-scroll-smooth-reverse">
               {duplicatedBottomRow.map((src, index) => (
-       <div
+                <div
                   key={index}
                   className="flex-none w-44 h-44 shrink-0 mx-2"
                 >

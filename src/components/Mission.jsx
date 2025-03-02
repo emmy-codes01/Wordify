@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ScrollReveal from 'scrollreveal'; // Import ScrollReveal
 import image3 from '../assets/images/image 3.png'
 import image4 from '../assets/images/image 4.png'
 import image5 from '../assets/images/image 5.png'
@@ -23,7 +24,23 @@ const Mission = () => {
     }
   ];
 
+
+   useEffect(() => {
+  ScrollReveal().reveal('.reveal', {
+    distance: '50px',
+    duration: 1000,
+    delay: 200,
+    easing: 'ease-in-out',
+    opacity: 0,
+    origin: 'bottom',
+    reset: true, // Optional: Reset animation on scroll back
+    // scale: 0.8,
+  });
+  
+}, []);
+
   return (
+
     <div>
       {/* Mission Statement Section */}
       <section className="bg-gray-50 py-16">
@@ -51,7 +68,7 @@ const Mission = () => {
 
           <div className='flex md:flex-row justify-center items-center flex-col gap-20 md:text-left text-center'>
             {/* Name cards */}
-            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500'>
+            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500 reveal'>
               <p className="text-gray-700 p-4 pb-2">
                 To amplify the Word of God coming from the mouth of His servants, to all men
                 in all the nations of the world.
@@ -65,7 +82,7 @@ const Mission = () => {
               </div>
             </div>
 
-            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500'>
+            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500 reveal'>
               <p className="text-gray-700 p-4 pb-2">
                 To amplify the Word of God coming from the mouth of His servants, to all men
                 in all the nations of the world.
@@ -79,7 +96,7 @@ const Mission = () => {
               </div>
             </div>
 
-            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500'>
+            <div className='flex flex-col max-w-sm shadow-md rounded-3xl bg-white-500 reveal'>
               <p className="text-gray-700 p-4 pb-2">
                 To amplify the Word of God coming from the mouth of His servants, to all men
                 in all the nations of the world.

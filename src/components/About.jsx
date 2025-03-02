@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ScrollReveal from 'scrollreveal'; // Import ScrollReveal
 import { ArrowUpRight, Users, Lightbulb, Shield, Rss, Anchor } from 'lucide-react';
 
 const About = () => {
+
+  
+  useEffect(() => {
+    // ScrollReveal setup
+    ScrollReveal().reveal('.reveal', {
+        distance: '50px',
+        duration: 1000,
+        delay: 200,
+        easing: 'ease-in-out',
+        opacity: 0,
+        origin: 'bottom',
+        reset: true, // Optional: Reset animation on scroll back
+        scale: 0.9,
+    });
+
+
+
+
+
+
+  }, []);
+  
+
+
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 mt-24 " id='About'>
       <div className="text-center mb-16 relative">
@@ -23,7 +49,7 @@ const About = () => {
         </svg>
       </div>
 
-      <div className="bg-gray-50 rounded-lg">
+      <div className="bg-gray-50 rounded-lg reveal">
         {/* Main grid */}
         <div className="relative grid md:grid-cols-2">
           {/* Vertical divider line */}
