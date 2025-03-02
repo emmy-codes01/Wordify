@@ -69,6 +69,7 @@ const Navbar = () => {
       className={`w-full px-4 py-4 md:pt-8 fixed top-0 left-0 bg-white z-50 transition-shadow ${
         scrolled ? 'shadow-lg' : ''
       }`}
+      style={{ position: 'fixed', width: '100%' }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
@@ -134,7 +135,7 @@ const Navbar = () => {
         >
           {/* Menu Navbar */}
           <div className="flex justify-between items-center p-4 border-b">
-            <div className="text-lg font-medium"></div>
+            <div className="text-lg font-medium">Menu</div>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-lg"
@@ -171,6 +172,16 @@ const Navbar = () => {
                 </div>
               )
             ))}
+            
+            {/* Add Download Button to mobile menu */}
+            <div className="mt-4 px-6 py-2">
+              <button
+                className="w-full text-white px-6 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors"
+                style={{ backgroundColor: '#cf0001' }}
+              >
+                Download
+              </button>
+            </div>
           </nav>
         </div>
       </div>

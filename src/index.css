@@ -4,6 +4,17 @@
 
 /* In your CSS file (e.g., index.css) */
 
+html,
 body {
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
     font-family: 'Montserrat', sans-serif;
+}
+
+#root,
+#__next {
+    width: 100%;
+    overflow-x: hidden;
 }
