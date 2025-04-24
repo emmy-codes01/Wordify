@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import logo from '../assets/images/logo.png';
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-scroll';
+import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom'; // Import RouterLink
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,10 +13,10 @@ const Navbar = () => {
   const navbarHeight = 80; 
 
   const navItems = [
-    { title: 'Home', id: 'nav' },
-    { title: 'About', id: 'about' },
-    { title: 'Support', id: 'support' },
-    { title: 'For Artists', id: '' },
+    { title: 'Home', id: 'nav', isRouter: false },
+    { title: 'About', id: 'about', isRouter: false },
+    { title: 'Support', id: 'support', isRouter: false },
+    { title: 'For Artists', id: '/for-artists', isRouter: true }, // Mark as router link and set id to path
   ];
 
   // Add shadow to navbar after scrolling
@@ -32,7 +34,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sectionOffsets = navItems
-        .filter(item => item.id) // Filter out items with empty ids
+        .filter(item => item.id && !item.isRouter) // Filter out router items and empty ids
         .map(item => {
           const element = document.getElementById(item.id);
           return {
@@ -80,23 +82,35 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center absolute left-1/2 md:gap-11 -translate-x-1/2">
           {navItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.id}
-              spy={true}
-              smooth={true}
-              duration={500}
-              offset={-navbarHeight} // Apply offset to account for navbar height
-              isDynamic={true} // Handle dynamic content changes
-              activeClass="active"
-              className={`px-4 py-2 text-sm cursor-pointer ${
-                activeSection === item.id
-                  ? 'text-red-500 border-b-2 border-red-500'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {item.title}
-            </Link>
+            item.isRouter ? (
+              // Use RouterLink for router navigation
+              <RouterLink
+                key={index}
+                to={item.id}
+                className={`px-4 py-2 text-sm cursor-pointer text-gray-600 hover:text-gray-900`}
+              >
+                {item.title}
+              </RouterLink>
+            ) : (
+              // Use ScrollLink for smooth scrolling
+              <ScrollLink
+                key={index}
+                to={item.id}
+                spy={true}
+                smooth={true}
+                duration={500}
+                offset={-navbarHeight} // Apply offset to account for navbar height
+                isDynamic={true} // Handle dynamic content changes
+                activeClass="active"
+                className={`px-4 py-2 text-sm cursor-pointer ${
+                  activeSection === item.id
+                    ? 'text-red-500 border-b-2 border-red-500'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {item.title}
+              </ScrollLink>
+            )
           ))}
         </nav>
 
@@ -122,7 +136,7 @@ const Navbar = () => {
         {/* Mobile Menu Overlay */}
         {isOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 transition-opacity z-40 md:hidden"
+            className="fixed inset-0 backdrop-blur-sm bg-opacity-50 transition-opacity z-40 md:hidden"
             onClick={() => setIsOpen(false)}
           />
         )}
@@ -134,8 +148,8 @@ const Navbar = () => {
           }`}
         >
           {/* Menu Navbar */}
-          <div className="flex justify-between items-center p-4 border-b">
-            <div className="text-lg font-medium">Menu</div>
+          <div className="flex p-4 border-b">
+            {/* <div className="text-lg font-medium">Menu</div> */}
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-lg"
@@ -148,8 +162,19 @@ const Navbar = () => {
           {/* Mobile Menu Items */}
           <nav className="py-2 text-center">
             {navItems.map((item, index) => (
-              item.id ? (
-                <Link
+              item.isRouter ? (
+                // Use RouterLink for router navigation
+                <RouterLink
+                  key={index}
+                  to={item.id}
+                  className="block px-6 py-4 text-sm text-gray-900 hover:bg-gray-50"
+                  onClick={() => setIsOpen(false)} // Close menu on link click
+                >
+                  {item.title}
+                </RouterLink>
+              ) : item.id ? (
+                // Use ScrollLink for smooth scrolling
+                <ScrollLink
                   key={index}
                   to={item.id}
                   spy={true}
@@ -162,7 +187,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)} // Close menu on link click
                 >
                   {item.title}
-                </Link>
+                </ScrollLink>
               ) : (
                 <div 
                   key={index}
