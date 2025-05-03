@@ -30,7 +30,7 @@ const HeroSection = () => {
 
 
     return (
-        <div className='flex flex-col justify-center text-center items-center mt-24 md:mt-40 gap-3 md:gap-6 pt-20'>
+        <div className='flex flex-col justify-center text-center items-center mt-24 md:mt-40 gap-3 md:gap-6 pt-14'>
             <p className='big text-3xl md:text-6xl font-bold reveal'>
                 Home of Unlimited Sermons
             </p>
