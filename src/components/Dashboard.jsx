@@ -265,7 +265,7 @@ export default function Dashboard() {
       </div>
       
       {/* Action Buttons */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-8">
+      {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-8">
         <button 
           onClick={handleEditProfileClick}
           className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 flex justify-center items-center"
@@ -278,7 +278,7 @@ export default function Dashboard() {
         >
           <span>Sign Out</span>
         </button>
-      </div>
+      </div> */}
       
       {error && (
         <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">

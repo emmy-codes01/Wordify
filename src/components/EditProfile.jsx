@@ -97,7 +97,7 @@ export default function EditProfile() {
       
       // Upload the file to Supabase storage
       const { error: uploadError } = await supabase.storage
-        .from('profiles')
+        .from('profile-photos')
         .upload(filePath, avatarFile);
         
       if (uploadError) throw uploadError;

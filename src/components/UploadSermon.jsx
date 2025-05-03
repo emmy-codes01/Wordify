@@ -87,6 +87,7 @@ export default function UploadSermon() {
     try {
       setUploading(true);
       setError(null);
+
       
       // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser();

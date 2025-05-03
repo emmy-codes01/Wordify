@@ -6,7 +6,6 @@ export default function Verify({ onNext, data }) {
   const [email, setEmail] = useState(data?.email || localStorage.getItem('signUpEmail') || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [resendCountdown, setResendCountdown] = useState(0);
 
   useEffect(() => {
     // Check auth status when component mounts
@@ -17,38 +16,6 @@ export default function Verify({ onNext, data }) {
     
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (resendCountdown > 0) {
-      const timer = setTimeout(() => setResendCountdown(resendCountdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [resendCountdown]);
-
-  const handleResendLink = async () => {
-    if (resendCountdown > 0) return;
-    
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/verify`,
-        },
-      });
-      
-      if (error) throw error;
-      
-      // Set a cooldown for resend button
-      setResendCountdown(60);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // This function can be used to manually check auth status
   const checkAuthStatus = async () => {
@@ -66,6 +33,14 @@ export default function Verify({ onNext, data }) {
       console.error('Auth check error:', error.message);
       // Don't set error here as it would show constantly during polling
     }
+  };
+
+  const openEmailClient = () => {
+    // Create a mailto link with the user's email
+    const mailtoLink = `mailto:${email}`;
+    
+    // Open the mail client
+    window.open(mailtoLink, '_blank');
   };
 
   return (
@@ -91,16 +66,13 @@ export default function Verify({ onNext, data }) {
       
       <div className="mb-6">
         <button
-          onClick={handleResendLink}
-          className={`w-full py-2 text-sm ${
-            resendCountdown > 0 
-              ? 'bg-gray-200 text-gray-500' 
-              : 'bg-white text-red-600 hover:bg-gray-50'
-          } border border-gray-300 rounded-md`}
-          disabled={resendCountdown > 0 || loading}
+          onClick={openEmailClient}
+          className="w-full py-2 text-sm bg-white text-red-600 hover:bg-gray-50 border border-gray-300 rounded-md flex items-center justify-center"
         >
-          {loading ? 'Sending...' : 
-            resendCountdown > 0 ? `Resend in ${resendCountdown}s` : 'Resend link'}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Open Email App
         </button>
       </div>
       
