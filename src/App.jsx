@@ -15,9 +15,9 @@ import UploadSermon from './components/UploadSermon';
 import AuthWrapper from './components/auth/AuthWrapper';
 import Dashboard from './components/Dashboard';
 import EditProfile from './components/EditProfile';
-// import MySermons from './components/MySermons';
+import Sermons from './components/Sermons';
 // import SecuritySettings from './components/SecuritySettings';
-// import Analytics from './components/Analytics';
+import Analytics from './components/Analytics';
 import { supabase } from './lib/supabase';
 
 // Create a Home component for the main page
@@ -97,9 +97,9 @@ const App = () => {
           <Route path="/dashboard" element={!session ? <Navigate to="/auth" /> : <Dashboard />} />
           <Route path="/dashboard/upload-sermon" element={!session ? <Navigate to="/auth" /> : <UploadSermon />} />
           <Route path="/dashboard/edit-profile" element={!session ? <Navigate to="/auth" /> : <EditProfile />} />
-          {/* <Route path="/dashboard/my-sermons" element={!session ? <Navigate to="/auth" /> : <MySermons />} />
-          <Route path="/dashboard/security-settings" element={!session ? <Navigate to="/auth" /> : <SecuritySettings />} />
-          <Route path="/dashboard/analytics" element={!session ? <Navigate to="/auth" /> : <Analytics />} /> */}
+          <Route path="/dashboard/sermons" element={!session ? <Navigate to="/auth" /> : <Sermons />} />
+          {/* <Route path="/dashboard/security-settings" element={!session ? <Navigate to="/auth" /> : <SecuritySettings />} /> */}
+          <Route path="/dashboard/analytics" element={!session ? <Navigate to="/auth" /> : <Analytics />} />
           
           {/* Redirects for old routes */}
           <Route path="/upload-sermon" element={<Navigate to="/dashboard/upload-sermon" />} />

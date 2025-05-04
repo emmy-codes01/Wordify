@@ -2,31 +2,38 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
-export default function SignIn({ onNext }) {
+export default function SignIn({ onNext, showNotification }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) throw error;
-      onNext('dashboard');
+      
+      // Show success notification
+      showNotification("Successfully signed in!", "success");
+      
+      // Move to dashboard
+      onNext('dashboard', { email });
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleForgotPassword = () => {
+    onNext('resetPassword', { email });
   };
 
   const handleGoogleSignIn = async () => {
@@ -39,7 +46,7 @@ export default function SignIn({ onNext }) {
       });
       if (error) throw error;
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     }
   };
 
@@ -53,13 +60,8 @@ export default function SignIn({ onNext }) {
       });
       if (error) throw error;
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     }
-  };
-
-  const handleForgotPassword = () => {
-    // Navigate to password reset flow
-    onNext('resetPassword', { email });
   };
 
   return (
@@ -67,12 +69,12 @@ export default function SignIn({ onNext }) {
       <div className="flex justify-center mb-6">
         <div className="h-12 w-12 rounded-full bg-red-600 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
       </div>
       
-      <h2 className="text-2xl font-bold mb-6 text-center">Sign in</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Sign in to your account</h2>
       
       <form onSubmit={handleSignIn}>
         <div className="mb-4">
@@ -80,7 +82,6 @@ export default function SignIn({ onNext }) {
           <input
             id="email"
             type="email"
-            placeholder="e.g noah2@gmail.com"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -92,7 +93,7 @@ export default function SignIn({ onNext }) {
           <div className="flex justify-between items-center mb-1">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <button 
-              type="button"
+              type="button" 
               className="text-sm text-red-600 hover:text-red-500"
               onClick={handleForgotPassword}
             >
@@ -130,11 +131,9 @@ export default function SignIn({ onNext }) {
         </button>
       </form>
       
-      <div className="text-center mb-4">
-        <span className="text-sm">or</span>
-      </div>
+      <div className="text-center text-sm text-gray-500 mb-4">or sign in with</div>
       
-      <div className="flex space-x-4 mb-6">
+      <div className="flex space-x-4 mb-4">
         <button
           onClick={handleGoogleSignIn}
           className="flex-1 flex items-center justify-center py-2 border border-gray-300 rounded-md hover:bg-gray-50"
@@ -159,9 +158,7 @@ export default function SignIn({ onNext }) {
         </button>
       </div>
       
-      {error && <div className="text-red-600 text-sm mt-2 text-center">{error}</div>}
-      
-      <div className="text-center text-sm mt-4">
+      <div className="text-center text-sm mt-6">
         Don't have an account? <a href="#" onClick={() => onNext('signup')} className="text-red-600">Sign up</a>
       </div>
     </div>

@@ -2,53 +2,58 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
-export default function SignUp({ onNext }) {
+export default function SignUp({ onNext, showNotification }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     
     // Validate passwords match
     if (password !== confirmPassword) {
-      setError("Passwords don't match");
+      showNotification("Passwords don't match", "error");
       setLoading(false);
       return;
     }
     
     // Validate password strength (optional)
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      showNotification("Password must be at least 6 characters", "error");
       setLoading(false);
       return;
     }
     
     try {
-      // Store email in localStorage for the next steps
-      localStorage.setItem('signUpEmail', email);
-      
-      const { error } = await supabase.auth.signUp({
+      // Sign up with Supabase (without email verification)
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/verify`,
-        },
       });
       
       if (error) throw error;
       
-      // Since we're using email/password, we'll likely need to verify the email
-      // before the user can use their account
-      onNext('verify', { email });
+      // Show success message
+      showNotification("Account created successfully! Logging you in...", "success");
+      
+      // If the user was created successfully, sign them in automatically
+      if (data.user) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        
+        if (signInError) throw signInError;
+        
+        // Move to dashboard
+        onNext('dashboard', { email }, "Successfully signed in!");
+      }
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -59,12 +64,12 @@ export default function SignUp({ onNext }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/profile`,
+          redirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error) throw error;
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     }
   };
 
@@ -73,12 +78,12 @@ export default function SignUp({ onNext }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
-          redirectTo: `${window.location.origin}/auth/profile`,
+          redirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error) throw error;
     } catch (error) {
-      setError(error.message);
+      showNotification(error.message, "error");
     }
   };
 
@@ -193,8 +198,6 @@ export default function SignUp({ onNext }) {
           Apple ID
         </button>
       </div>
-      
-      {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
       
       <div className="text-center text-sm mt-6"> 
         Already have an account? <a href="#" onClick={() => onNext('signin')} className="text-red-600">Sign in</a>

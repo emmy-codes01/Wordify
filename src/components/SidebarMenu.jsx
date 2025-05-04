@@ -69,8 +69,8 @@ export default function SidebarMenu({ isOpen, onClose }) {
   };
 
   const navigateTo = (path) => {
-    onClose();
     navigate(path);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -85,7 +85,6 @@ export default function SidebarMenu({ isOpen, onClose }) {
         {/* Header */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex justify-between items-center">
-            {/* <h2 className="text-lg font-semibold">Menu</h2> */}
             <button onClick={onClose} className="focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -153,20 +152,8 @@ export default function SidebarMenu({ isOpen, onClose }) {
             </div>
           </button>
           
-          <button 
-            onClick={() => navigateTo('/security-settings')}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:outline-none"
-          >
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span>Security Settings</span>
-            </div>
-          </button>
-          
-          <button 
-            onClick={() => navigateTo('/my-sermons')}
+          {/* <button 
+            onClick={() => navigateTo('/sermons')}
             className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:outline-none"
           >
             <div className="flex items-center">
@@ -175,7 +162,7 @@ export default function SidebarMenu({ isOpen, onClose }) {
               </svg>
               <span>My Sermons</span>
             </div>
-          </button>
+          </button> */}
           
           <button 
             onClick={() => navigateTo('/analytics')}

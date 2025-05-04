@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useNavigate, Routes, Route } from 'react-router-dom';
 import SignUp from './SignUp';
-import Verify from './Verify';
 import ResetPassword from './ResetPassword';
 import UpdatePassword from './UpdatePassword';
 import Profile from './Profile';
@@ -51,15 +50,13 @@ export default function AuthWrapper() {
     
     checkSession();
     
-    // Check URL for password reset or verify
+    // Check URL for password reset
     const url = new URL(window.location.href);
     const hashParams = new URLSearchParams(url.hash.substring(1));
     const type = hashParams.get('type');
     
     if (type === 'recovery') {
       setCurrentStep('updatePassword');
-    } else if (type === 'signup') {
-      setCurrentStep('verify');
     }
     
     // Check pathname for specific auth routes
@@ -70,8 +67,6 @@ export default function AuthWrapper() {
       setCurrentStep('signup');
     } else if (pathname.includes('/auth/reset-password')) {
       setCurrentStep('resetPassword');
-    } else if (pathname.includes('/auth/verify')) {
-      setCurrentStep('verify');
     }
     
     // Listen for auth changes
@@ -119,8 +114,6 @@ export default function AuthWrapper() {
     switch (currentStep) {
       case 'signup':
         return <SignUp onNext={handleNext} showNotification={showNotification} />;
-      case 'verify':
-        return <Verify onNext={handleNext} data={stepData} showNotification={showNotification} />;
       case 'resetPassword':
         return <ResetPassword onNext={handleNext} data={stepData} showNotification={showNotification} />;
       case 'updatePassword':
@@ -181,7 +174,6 @@ export default function AuthWrapper() {
             <Route index element={renderStep()} />
             <Route path="signin" element={<SignIn onNext={handleNext} showNotification={showNotification} />} />
             <Route path="signup" element={<SignUp onNext={handleNext} showNotification={showNotification} />} />
-            <Route path="verify" element={<Verify onNext={handleNext} data={stepData} showNotification={showNotification} />} />
             <Route path="reset-password" element={<ResetPassword onNext={handleNext} data={stepData} showNotification={showNotification} />} />
             <Route path="update-password" element={<UpdatePassword onNext={handleNext} showNotification={showNotification} />} />
             <Route path="profile" element={<Profile onNext={handleNext} data={stepData} showNotification={showNotification} />} />

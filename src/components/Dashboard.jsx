@@ -22,6 +22,7 @@ export default function Dashboard() {
     start: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
+  const [showProfileNotification, setShowProfileNotification] = useState(false);
   
   const navigate = useNavigate();
 
@@ -48,6 +49,16 @@ export default function Dashboard() {
           }
           
           setProfile(profileData || {});
+          
+          // Check if profile is incomplete and this is the user's first login
+          // Using local storage to track if this is the first visit
+          const hasVisitedBefore = localStorage.getItem(`visited_${user.id}`);
+          
+          if (!hasVisitedBefore && (!profileData || !profileData.full_name || !profileData.avatar_url)) {
+            setShowProfileNotification(true);
+            // Mark that the user has visited the dashboard
+            localStorage.setItem(`visited_${user.id}`, 'true');
+          }
           
           // Fetch user's sermons
           const { data: sermonsData, error: sermonsError } = await supabase
@@ -98,6 +109,11 @@ export default function Dashboard() {
 
   const handleEditProfileClick = () => {
     navigate('/edit-profile');
+    setShowProfileNotification(false);
+  };
+
+  const closeNotification = () => {
+    setShowProfileNotification(false);
   };
 
   const formatDate = (dateString) => {
@@ -139,6 +155,42 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      {/* Profile Update Notification */}
+      {showProfileNotification && (
+        <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">
+                  Welcome to Wordify! <br /> Complete your profile in the Profile Section.
+                </p>
+              </div>
+            </div>
+            <div className="flex">
+              <button
+                onClick={handleEditProfileClick}
+                className="mr-2 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Update Profile
+              </button>
+              <button
+                onClick={closeNotification}
+                className="text-red-500 hover:text-red-700"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center">
@@ -263,22 +315,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      
-      {/* Action Buttons */}
-      {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-8">
-        <button 
-          onClick={handleEditProfileClick}
-          className="px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 flex justify-center items-center"
-        >
-          <span>Edit Profile</span>
-        </button>
-        <button 
-          onClick={handleSignOut}
-          className="px-4 py-3 border border-gray-300 rounded-md hover:bg-gray-50 flex justify-center items-center"
-        >
-          <span>Sign Out</span>
-        </button>
-      </div> */}
       
       {error && (
         <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
