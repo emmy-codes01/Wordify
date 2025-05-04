@@ -41,7 +41,7 @@ export default function SignIn({ onNext, showNotification }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: 'https://wordify-plum.vercel.app/dashboard',
         },
       });
       if (error) throw error;
@@ -55,7 +55,7 @@ export default function SignIn({ onNext, showNotification }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: 'https://wordify-plum.vercel.app/dashboard',
         },
       });
       if (error) throw error;
