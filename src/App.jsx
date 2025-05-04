@@ -19,6 +19,7 @@ import Sermons from './components/Sermons';
 // import SecuritySettings from './components/SecuritySettings';
 import Analytics from './components/Analytics';
 import { supabase } from './lib/supabase';
+import AuthCallback from './components/auth/AuthCallback';
 
 // Create a Home component for the main page
 const Home = () => {
@@ -107,6 +108,7 @@ const App = () => {
           <Route path="/my-sermons" element={<Navigate to="/dashboard/my-sermons" />} />
           <Route path="/security-settings" element={<Navigate to="/dashboard/security-settings" />} />
           <Route path="/analytics" element={<Navigate to="/dashboard/analytics" />} />
+          <Route path="/auth-callback" element={<AuthCallback />} />
           
           {/* Redirect auth related paths to the AuthWrapper */}
           <Route path="/signup" element={<Navigate to="/auth" />} />
